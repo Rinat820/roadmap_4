@@ -1,8 +1,8 @@
-"""Initial migration
+"""initial_schema
 
-Revision ID: 35734467e50d
+Revision ID: b9fe62a620b0
 Revises: 
-Create Date: 2026-02-04 10:38:12.793145
+Create Date: 2026-02-12 04:26:07.297046
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '35734467e50d'
+revision: str = 'b9fe62a620b0'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,19 +26,19 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_players_name'), 'players', ['name'], unique=False)
+    op.create_index(op.f('ix_players_name'), 'players', ['name'], unique=True)
     op.create_table('matches',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('UUID', sa.CHAR(length=36), nullable=False),
-    sa.Column('Player1', sa.Integer(), nullable=False),
-    sa.Column('Player2', sa.Integer(), nullable=False),
-    sa.Column('Winner', sa.Integer(), nullable=False),
-    sa.Column('Score', sa.JSON(), nullable=False),
-    sa.ForeignKeyConstraint(['Player1'], ['players.id'], ),
-    sa.ForeignKeyConstraint(['Player2'], ['players.id'], ),
-    sa.ForeignKeyConstraint(['Winner'], ['players.id'], ),
+    sa.Column('uuid', sa.CHAR(length=36), nullable=False),
+    sa.Column('player1_id', sa.Integer(), nullable=False),
+    sa.Column('player2_id', sa.Integer(), nullable=False),
+    sa.Column('winner_id', sa.Integer(), nullable=True),
+    sa.Column('score', sa.JSON(), nullable=False),
+    sa.ForeignKeyConstraint(['player1_id'], ['players.id'], ),
+    sa.ForeignKeyConstraint(['player2_id'], ['players.id'], ),
+    sa.ForeignKeyConstraint(['winner_id'], ['players.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('UUID')
+    sa.UniqueConstraint('uuid')
     )
     # ### end Alembic commands ###
 

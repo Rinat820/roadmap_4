@@ -3,4 +3,6 @@ pymysql
 python-dotenv
 alembic
 mypy
+cryptography
+waitress
 #uwsgi
