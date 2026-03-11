@@ -2,6 +2,7 @@ sqlalchemy>=2.0.0
 pymysql
 python-dotenv
 alembic
+Jinja2
 mypy
 cryptography
 waitress
