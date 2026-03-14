@@ -6,4 +6,5 @@ Jinja2
 mypy
 cryptography
 waitress
+pytest
 #uwsgi

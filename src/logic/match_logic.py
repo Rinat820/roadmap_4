@@ -59,7 +59,7 @@ class MatchManager:
         is_tb = (score["games"][0] == 6 and score["games"][1] == 6)
         point_limit = 7 if is_tb else 4
 
-        if score["points"][player_idx] == point_limit:
+        if score["points"][player_idx] >= point_limit and (score["points"][player_idx] - score["points"][opponent] >= 2):
             score["points"] = [0, 0]
             score["games"][player_idx] += 1
             
@@ -99,4 +99,5 @@ class MatchManager:
         
         logger.info(f"Match {uuid} removed. Winner ID: {match['winner_id']}")
         return data
-        
+    
+    
