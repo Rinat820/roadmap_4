@@ -1,3 +1,6 @@
+import copy
+
+from src.match_score.schemas import MatchScoreRequest
 from src.logic.dto import MatchDTO
 from src.dao.dto import PlayerDTO
 
@@ -30,18 +33,18 @@ class MatchManager:
         return uuid
     
     @classmethod
-    def add_point(cls, uuid, winner):
-        match = cls.matches.get(uuid)
+    def add_point(cls, data: MatchScoreRequest):
+        match = cls.matches.get(data.uuid)
         if not match:
-            logger.warning(f"Match {uuid} not found")
+            logger.warning(f"Match {data.uuid} not found")
             raise MatchNotFoundError("Данного матча не существует")
         
-        if match["player1_id"] == winner:
+        if match["player1_id"] == data.winner_id:
             player_idx = 0
-        elif match["player2_id"] == winner:
+        elif match["player2_id"] == data.winner_id:
             player_idx = 1
         else:
-            logger.warning(f"This player {winner} is not participating in this match {uuid}")
+            logger.warning(f"This player {data.winner_id} is not participating in this match {data.uuid}")
             raise PlayerNotParticipantError("Данный игрок не участвует в этом матче")
         
 
@@ -49,8 +52,8 @@ class MatchManager:
         
         return cls._update_status(match, player_idx)
                                                  
-    @classmethod
-    def _update_status(cls, match, player_idx):
+    @staticmethod
+    def _update_status(match, player_idx):
         score = match["score"]
         opponent = 1 - player_idx
         is_finished = False
@@ -74,10 +77,7 @@ class MatchManager:
 
             if score["sets"][player_idx] == 2:
                 is_finished = True
-                if player_idx == 0:
-                    match["winner_id"] = match["player1_id"]
-                if player_idx == 1:
-                    match["winner_id"] = match["player2_id"]
+                match["winner_id"] = match[f"player{player_idx + 1}_id"]
 
                 
         return is_finished, match
@@ -100,4 +100,16 @@ class MatchManager:
         logger.info(f"Match {uuid} removed. Winner ID: {match['winner_id']}")
         return data
     
+    @staticmethod
+    def format_score(match):
+        mapping = {0: "0", 1: "15", 2: "30", 3: "40"}
+        
+        display_match = copy.deepcopy(match)
+        if not display_match["score"]["games"] == [6, 6]:
+            p1, p2 = display_match["score"]["points"]
+            display_match["score"]["points"] = [
+                mapping.get(p1, "AD"),
+                mapping.get(p2, "AD")
+            ]
+        return display_match
     

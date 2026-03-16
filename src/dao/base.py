@@ -32,6 +32,7 @@ class BaseDAO:
             session.add(new_instance)
             try:
                 session.commit()
+                session.refresh(new_instance)
                 return cls.dto(**new_instance.to_dict())
             except SQLAlchemyError as e:
                 session.rollback()

@@ -1,5 +1,7 @@
 from src.view.responses import ResponseBuilder
+
 from src.new_match.controller import NewMatchController
+from src.match_score.controller import MatchScoreController
 
 import mimetypes
 from pathlib import Path
@@ -32,7 +34,15 @@ class Router:
             
             else:
                 status, headers, body = NewMatchController.render_page(environ)
-            
+        
+        elif path == "/match-score":
+            if method == "POST":
+                status, headers, body = MatchScoreController.process_point(environ)
+
+            else:
+                status, headers, body = MatchScoreController.render_page(environ)
+
+        
         elif path == "/favicon.ico":
             status, headers, body = ("404 Not Found", [("Content-Type", "text/plain")], [b""])
 

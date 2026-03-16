@@ -1,3 +1,4 @@
+from typing import Optional
 from dataclasses import dataclass
 
 @dataclass
@@ -7,3 +8,4 @@ class MatchDTO:
     player2_id: int
     winner_id: int
     score: dict | list
+    id: Optional[int] = None
