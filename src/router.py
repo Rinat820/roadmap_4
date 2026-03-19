@@ -2,6 +2,7 @@ from src.view.responses import ResponseBuilder
 
 from src.new_match.controller import NewMatchController
 from src.match_score.controller import MatchScoreController
+from src.matches.controller import MatchesController
 
 import mimetypes
 from pathlib import Path
@@ -42,6 +43,9 @@ class Router:
             else:
                 status, headers, body = MatchScoreController.render_page(environ)
 
+        elif path == "/matches":
+            status, headers, body = MatchesController.get_matches_page(environ)
+        
         
         elif path == "/favicon.ico":
             status, headers, body = ("404 Not Found", [("Content-Type", "text/plain")], [b""])

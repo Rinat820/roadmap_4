@@ -27,7 +27,10 @@ class MatchManager:
                 "games": [0, 0],
                 "points": [0, 0]  
             },
-            "winner_id": None
+            "winner": {
+                "id": None,
+                "name": None
+            }
         }
         logger.info(f"Match {uuid} created p1: {player1} p2: {player2}")
         return uuid
@@ -77,7 +80,7 @@ class MatchManager:
 
             if score["sets"][player_idx] == 2:
                 is_finished = True
-                match["winner_id"] = match[f"player{player_idx + 1}_id"]
+                match["winner"]["id"] = match[f"player{player_idx + 1}_id"]
 
                 
         return is_finished, match
@@ -93,7 +96,7 @@ class MatchManager:
             uuid = uuid,
             player1_id = match["player1_id"],
             player2_id = match["player2_id"],
-            winner_id = match["winner_id"],
+            winner_id = match["winner"]["id"],
             score = match["score"]
         )
         

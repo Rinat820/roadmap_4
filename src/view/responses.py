@@ -29,7 +29,7 @@ class ResponseBuilder:
         return status, [("Location", location)], [b""]
 
     @classmethod
-    def build_error_response(cls, status: str, template, error_text=""):
+    def build_error_response(cls, status: str, template, error_text="", **context):
         stack = traceback.extract_stack()
         chain = " -> ".join([f"{f.filename.split('/')[-1]}:{f.name}" for f in stack[-4:-1]])
         logger.warning(f"ERROR_RESP | PATH: {chain} | MSG: {error_text}")
@@ -40,4 +40,4 @@ class ResponseBuilder:
         if status.startswith("404"):
             return cls.render(status, "404.html")
         
-        return cls.render(status, template, error=error_text)
+        return cls.render(status, template, error=error_text, **context)

@@ -2,11 +2,11 @@ import json
 from dataclasses import asdict
 
 from src.exceptions import MatchNotFoundError
+from src.exceptions import MatchCompletedError
 
 from src.match_score.schemas import MatchScoreRequest
 from src.dao.match import MatchDAO
 from src.logic.match_logic import MatchManager
-from src.exceptions import MatchCompletedError
 
 import logging
 
